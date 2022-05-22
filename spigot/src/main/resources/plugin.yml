@@ -1,0 +1,5 @@
+name: Funnel
+description: Quick and easy to use queue plugin for servers
+author: 98ping
+version: 1.1
+main: ltd.matrixstudios.funnel.FunnelSpigotPlugin

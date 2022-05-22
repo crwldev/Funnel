@@ -1,0 +1,5 @@
+rootProject.name = 'funnel'
+include 'commons'
+include 'spigot'
+include 'application'
+

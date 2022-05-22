@@ -1,0 +1,8 @@
+queueName: "Hub-01"
+queueDestination: "Hub-01"
+jedisURI: "redis://172.18.0.1:6379/0"
+
+priorities:
+    default:
+      permission: "queue.default"
+      priority: 0
