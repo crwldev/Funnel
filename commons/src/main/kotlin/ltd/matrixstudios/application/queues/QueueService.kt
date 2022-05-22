@@ -42,7 +42,7 @@ object QueueService {
         return CompletableFuture.supplyAsync {
             return@supplyAsync FunnelCommons.runRedisCommand {
                 val id = queueId.lowercase()
-                val exists = it.hexists("Funnel:queues:", id)
+                val exists = it.exists("Funnel:queues:$id")
 
                 if (exists)
                 {
