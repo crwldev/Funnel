@@ -1,3 +1,11 @@
 dependencies {
     implementation project(":commons")
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ltd.matrixstudios.application.FunnelApplication'
+        )
+    }
+}

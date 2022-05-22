@@ -7,6 +7,7 @@ import ltd.matrixstudios.application.queues.QueueService
 class QueueThread : Thread() {
     override fun run() {
         while (true) {
+            println("Checking for players to send")
             for (queue in QueueService.getAllQueues().get()) {
                 if (!queue.paused) {
                     val nextToSend = queue.players.poll()
@@ -22,7 +23,7 @@ class QueueThread : Thread() {
                 }
             }
             try {
-                sleep(50L)
+                sleep(1500L)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }

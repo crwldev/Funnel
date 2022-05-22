@@ -42,7 +42,7 @@ class FunnelSpigotPlugin : JavaPlugin() {
     }
 
     fun createQueue() {
-        FunnelCommons.start(config.getString("jedisURI").lowercase(), config.getString("queueName"), config.getString("queueDestination"))
+        FunnelCommons.start(config.getString("jedisURI").lowercase(), config.getString("queueName"), config.getString("queueDestination"), false)
     }
 
     fun loadPriorities() {

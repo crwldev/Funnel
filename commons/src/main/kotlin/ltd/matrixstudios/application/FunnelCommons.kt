@@ -25,33 +25,36 @@ object FunnelCommons {
 
     lateinit var globalQueueForInstance: Queue
 
-    fun start(jedisURI: String, queueId: String, destination: String) {
+    fun start(jedisURI: String, queueId: String, destination: String, console: Boolean) {
         instance = this
 
         globalJedis = JedisPool(URI(jedisURI))
         globalJedisResource = globalJedis.resource
 
-        runRedisCommand {
-            val exists = it.exists("Funnel:queues:$queueId")
+        if (!console) {
+            runRedisCommand {
+                val exists = it.exists("Funnel:queues:$queueId")
 
-            if (exists) {
-                val redisFetchedData = it.hget("Funnel:queues:", queueId)
+                if (exists) {
+                    val redisFetchedData = it.hget("Funnel:queues:", queueId)
 
-                val queue = gson.fromJson(redisFetchedData, Queue::class.java)
+                    val queue = gson.fromJson(redisFetchedData, Queue::class.java)
 
-                globalQueueForInstance = queue
+                    globalQueueForInstance = queue
 
-            }
+                }
 
-            if (!exists) {
-                val queue = Queue(queueId.lowercase(), PriorityQueue(PriorityQueueComparator()), destination, queueId, true)
+                if (!exists) {
+                    val queue =
+                        Queue(queueId.lowercase(), PriorityQueue(PriorityQueueComparator()), destination, queueId, true)
 
-                queue.save()
+                    queue.save()
+                }
             }
         }
     }
 
-    fun <T> runRedisCommand(runnable: (Jedis) -> T)  : T {
+    fun <T> runRedisCommand(runnable: (Jedis) -> T): T {
         if (globalJedis == null || globalJedis.isClosed) {
             throw InterruptedException("Running of command was interrupted by the JedisPool not existing")
         }
