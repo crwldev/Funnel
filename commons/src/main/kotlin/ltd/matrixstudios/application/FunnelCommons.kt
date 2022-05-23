@@ -23,6 +23,9 @@ object FunnelCommons {
     lateinit var globalJedis: JedisPool
     lateinit var globalJedisResource: Jedis
 
+    lateinit var pubsubJedisPool: JedisPool
+    lateinit var pubsubJedisResource: Jedis
+
     lateinit var globalQueueForInstance: Queue
 
     fun start(jedisURI: String, queueId: String, destination: String, console: Boolean) {
@@ -31,9 +34,12 @@ object FunnelCommons {
         globalJedis = JedisPool(URI(jedisURI))
         globalJedisResource = globalJedis.resource
 
+        pubsubJedisPool = JedisPool(URI(jedisURI))
+        pubsubJedisResource = pubsubJedisPool.resource
+
         if (!console) {
             runRedisCommand {
-                val exists = it.exists("Funnel:queues:$queueId")
+                val exists = it.hexists("Funnel:queues:", queueId)
 
                 if (exists) {
                     val redisFetchedData = it.hget("Funnel:queues:", queueId)
