@@ -26,11 +26,12 @@ class JedisBukkitSubscription : JedisPubSub() {
                             if (player != null) {
                                 player.sendMessage("${ChatColor.GREEN}You are being sent!")
                                 BungeeUtil.send(player, queue.destination)
+
+                                queue.remove(player.uniqueId)
+
+                                queue.save()
                             }
 
-                            queue.remove(player.uniqueId)
-
-                            queue.save()
 
                         } else {
                             return

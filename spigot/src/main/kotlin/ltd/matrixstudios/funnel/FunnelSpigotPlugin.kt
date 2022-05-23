@@ -4,9 +4,9 @@ import co.aikar.commands.PaperCommandManager
 import ltd.matrixstudios.application.FunnelCommons
 import ltd.matrixstudios.funnel.commands.JoinQueueCommand
 import ltd.matrixstudios.funnel.commands.PauseQueueCommand
-import ltd.matrixstudios.funnel.commands.QueueDebug
+import ltd.matrixstudios.funnel.commands.QueueDebugCommand
 import ltd.matrixstudios.application.priority.PriorityService
-import ltd.matrixstudios.funnel.commands.ForceAllToQueue
+import ltd.matrixstudios.funnel.commands.ForceAllToQueueCommand
 import ltd.matrixstudios.funnel.recipient.JedisBukkitSubscription
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -35,10 +35,10 @@ class FunnelSpigotPlugin : JavaPlugin() {
         server.messenger.registerOutgoingPluginChannel(this, "BungeeCord")
 
         val commandHandler = PaperCommandManager(this).apply {
-            this.registerCommand(QueueDebug)
+            this.registerCommand(QueueDebugCommand)
             this.registerCommand(JoinQueueCommand)
             this.registerCommand(PauseQueueCommand)
-            this.registerCommand(ForceAllToQueue)
+            this.registerCommand(ForceAllToQueueCommand)
         }
     }
 

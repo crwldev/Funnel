@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.CommandAlias
 import ltd.matrixstudios.application.queues.QueueService
 import org.bukkit.entity.Player
 
-object QueueDebug : BaseCommand() {
+object QueueDebugCommand : BaseCommand() {
 
     @CommandAlias("queuedebug")
     fun queueDebug(player: Player) {
