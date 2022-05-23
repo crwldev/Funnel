@@ -19,6 +19,14 @@ data class Queue(
         }
     }
 
+    fun remove(uuid: UUID) {
+        val player = players.firstOrNull { it.uuid == uuid }
+
+        if (player != null) {
+            players.remove(player)
+        }
+    }
+
     fun containsPlayer(uuid: UUID?): Boolean {
         for (player in players) {
             if (player.uuid == uuid) {
