@@ -24,5 +24,7 @@ object ForceAllToQueueCommand : BaseCommand() {
         Bukkit.getOnlinePlayers().forEach {
             QueueService.addPlayerToQueue(queue, it.uniqueId, 0)
         }
+
+        player.sendMessage("${ChatColor.GREEN}Forced all players into $queueId")
     }
 }

@@ -23,6 +23,6 @@ object PauseQueueCommand : BaseCommand() {
         queue.paused = !queue.paused
 
         queue.save()
-        sender.sendMessage("${ChatColor.GREEN}Updated the paused status of ${ChatColor.WHITE}$queueId")
+        sender.sendMessage("${ChatColor.GREEN}Updated the paused status of ${ChatColor.WHITE}$queueId ${ChatColor.GREEN}to ${queue.paused}")
     }
 }
