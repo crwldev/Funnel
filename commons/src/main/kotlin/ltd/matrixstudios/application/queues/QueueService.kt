@@ -9,7 +9,7 @@ object QueueService {
 
 
     fun addPlayerToQueue(queue: Queue, player: UUID, priority: Int) {
-        queue.players.add(FunnelPlayer(player, priority, System.currentTimeMillis()))
+        queue.players.add(FunnelPlayer(player, priority, System.currentTimeMillis(), System.currentTimeMillis()))
 
         queue.save()
     }

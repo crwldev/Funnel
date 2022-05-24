@@ -8,6 +8,7 @@ import org.bukkit.ChatColor
 import org.bukkit.scheduler.BukkitRunnable
 import redis.clients.jedis.JedisPubSub
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class JedisBukkitSubscription : JedisPubSub() {
 
@@ -35,6 +36,41 @@ class JedisBukkitSubscription : JedisPubSub() {
 
                         } else {
                             return
+                        }
+                    }
+                }.runTask(FunnelSpigotPlugin.instance)
+            }
+            "CHECK_QUEUE" -> {
+                object : BukkitRunnable() {
+                    override fun run() {
+
+                       QueueService.findQueue(extraMeta).thenApply {
+                            if (it == null) {
+                                Bukkit.getLogger().severe("Tried to check queue but it was null")
+
+                                return@thenApply
+                            }
+
+
+
+                           for (player in it.players) {
+                               val bukkitPlayer = Bukkit.getPlayer(player.uuid)
+
+                               if (bukkitPlayer != null) {
+                                   player.lastUpdated = System.currentTimeMillis()
+
+                               }
+
+                               if (bukkitPlayer == null) {
+                                   if (System.currentTimeMillis().minus(player.lastUpdated) >= 15000L) {
+                                       it.remove(player.uuid)
+                                   }
+                               }
+
+
+                           }
+
+                           it.save()
                         }
                     }
                 }.runTask(FunnelSpigotPlugin.instance)

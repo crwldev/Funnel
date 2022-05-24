@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 object JoinQueueCommand : BaseCommand() {
 
-    @CommandAlias("joinqueue")
+    @CommandAlias("joinqueue|jq")
     fun joinQueue(player: Player, @Name("queue")queue: String) {
         val actualQueue = QueueService.findQueue(queue).get()
 

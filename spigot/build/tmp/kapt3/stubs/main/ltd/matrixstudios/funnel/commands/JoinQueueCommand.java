@@ -11,7 +11,7 @@ public final class JoinQueueCommand extends co.aikar.commands.BaseCommand {
         super();
     }
     
-    @co.aikar.commands.annotation.CommandAlias(value = "joinqueue")
+    @co.aikar.commands.annotation.CommandAlias(value = "joinqueue|jq")
     public final void joinQueue(@org.jetbrains.annotations.NotNull()
     org.bukkit.entity.Player player, @org.jetbrains.annotations.NotNull()
     @co.aikar.commands.annotation.Name(value = "queue")

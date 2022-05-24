@@ -5,7 +5,8 @@ import java.util.*
 data class FunnelPlayer(
     var uuid: UUID,
     var priority: Int,
-    var inserted: Long
+    var inserted: Long,
+    var lastUpdated: Long
 ) : Comparable<FunnelPlayer> {
 
 

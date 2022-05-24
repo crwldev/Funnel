@@ -9,6 +9,7 @@ class QueueThread : Thread() {
         while (true) {
             println("Checking for players to send")
             for (queue in QueueService.getAllQueues().get()) {
+
                 if (!queue.paused) {
                     val nextToSend = queue.players.poll()
 
@@ -18,9 +19,18 @@ class QueueThread : Thread() {
                                 "Funnel:bukkit",
                                 "SEND_PLAYER|${nextToSend.uuid}"
                             )
+
                         }
                     }
                 }
+                println("a")
+                FunnelCommons.runRedisCommand {
+                    it.publish(
+                        "Funnel:bukkit",
+                        "CHECK_QUEUE|${queue.id}"
+                    )
+                }
+                println("b")
             }
             try {
                 sleep(1500L)
