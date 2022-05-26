@@ -60,11 +60,40 @@ object FunnelCommons {
         }
     }
 
+    fun <T> runPubsubRedisCommand(runnable: (Jedis) -> T): T {
+        if (pubsubJedisPool == null || pubsubJedisPool.isClosed) {
+            throw InterruptedException("Running of command was interrupted by the JedisPool not existing")
+        }
+
+        val resource = pubsubJedisResource
+
+        val value = resource.use {
+            runnable.invoke(it)
+        }
+
+        if (globalJedis != null) {
+            globalJedis.returnResource(resource)
+        }
+
+        return value
+
+    }
+
     fun <T> runRedisCommand(runnable: (Jedis) -> T): T {
         if (globalJedis == null || globalJedis.isClosed) {
             throw InterruptedException("Running of command was interrupted by the JedisPool not existing")
         }
 
-        globalJedisResource.use { jedis -> return runnable(jedis) }
+        val resource = globalJedisResource
+
+        val value = resource.use {
+            runnable.invoke(it)
+        }
+
+        if (globalJedis != null) {
+            globalJedis.returnResource(resource)
+        }
+
+        return value
     }
 }

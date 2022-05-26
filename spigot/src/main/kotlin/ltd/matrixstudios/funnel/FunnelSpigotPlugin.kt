@@ -2,11 +2,8 @@ package ltd.matrixstudios.funnel
 
 import co.aikar.commands.PaperCommandManager
 import ltd.matrixstudios.application.FunnelCommons
-import ltd.matrixstudios.funnel.commands.JoinQueueCommand
-import ltd.matrixstudios.funnel.commands.PauseQueueCommand
-import ltd.matrixstudios.funnel.commands.QueueDebugCommand
 import ltd.matrixstudios.application.priority.PriorityService
-import ltd.matrixstudios.funnel.commands.ForceAllToQueueCommand
+import ltd.matrixstudios.funnel.commands.*
 import ltd.matrixstudios.funnel.recipient.JedisBukkitSubscription
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -27,7 +24,7 @@ class FunnelSpigotPlugin : JavaPlugin() {
         loadPriorities()
 
         thread {
-            FunnelCommons.pubsubJedisResource.use {
+            FunnelCommons.runPubsubRedisCommand {
                 it.subscribe(JedisBukkitSubscription(), "Funnel:bukkit")
             }
         }
@@ -39,6 +36,7 @@ class FunnelSpigotPlugin : JavaPlugin() {
             this.registerCommand(JoinQueueCommand)
             this.registerCommand(PauseQueueCommand)
             this.registerCommand(ForceAllToQueueCommand)
+            this.registerCommand(LeaveQueueCommand)
         }
     }
 
