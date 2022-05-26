@@ -10,6 +10,7 @@ import redis.clients.jedis.JedisPool
 import java.net.URI
 import java.util.*
 
+
 object FunnelCommons {
 
     lateinit var instance: FunnelCommons
@@ -37,6 +38,7 @@ object FunnelCommons {
         pubsubJedisPool = JedisPool(URI(jedisURI))
         pubsubJedisResource = pubsubJedisPool.resource
 
+
         if (!console) {
             runRedisCommand {
                 val exists = it.hexists("Funnel:queues:", queueId)
@@ -60,40 +62,27 @@ object FunnelCommons {
         }
     }
 
-    fun <T> runPubsubRedisCommand(runnable: (Jedis) -> T): T {
-        if (pubsubJedisPool == null || pubsubJedisPool.isClosed) {
-            throw InterruptedException("Running of command was interrupted by the JedisPool not existing")
+    fun <T> runPubsubRedisCommand(lambda: (Jedis) -> T): T {
+        if (globalJedis == null || globalJedis.isClosed) {
+            throw IllegalStateException("A connection to the redis server couldn't be established or has been forcefully closed")
         }
 
-        val resource = pubsubJedisResource
-
-        val value = resource.use {
-            runnable.invoke(it)
+        try {
+            globalJedis.resource.use { jedis -> return lambda(jedis) }
+        } catch (e: Exception) {
+            throw RuntimeException("Could not use resource and return", e)
         }
-
-        if (globalJedis != null) {
-            globalJedis.returnResource(resource)
-        }
-
-        return value
-
     }
 
-    fun <T> runRedisCommand(runnable: (Jedis) -> T): T {
+    fun <T> runRedisCommand(lambda: (Jedis) -> T): T {
         if (globalJedis == null || globalJedis.isClosed) {
-            throw InterruptedException("Running of command was interrupted by the JedisPool not existing")
+            throw IllegalStateException("A connection to the redis server couldn't be established or has been forcefully closed")
         }
 
-        val resource = globalJedisResource
-
-        val value = resource.use {
-            runnable.invoke(it)
+        try {
+            globalJedis.resource.use { jedis -> return lambda(jedis) }
+        } catch (e: Exception) {
+            throw RuntimeException("Could not use resource and return", e)
         }
-
-        if (globalJedis != null) {
-            globalJedis.returnResource(resource)
-        }
-
-        return value
     }
 }
