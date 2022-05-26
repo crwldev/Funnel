@@ -20,6 +20,8 @@ object LeaveQueueCommand : BaseCommand() {
             it.remove(player.uniqueId)
             player.sendMessage("${ChatColor.GREEN}You have left the queue!")
 
+            it.save()
+
 
         }
     }
