@@ -11,6 +11,8 @@ object QueueService {
     fun addPlayerToQueue(queue: Queue, player: UUID, priority: Int) {
         queue.players.add(FunnelPlayer(player, priority, System.currentTimeMillis(), System.currentTimeMillis()))
 
+        recalculateQueue(queue)
+
         queue.save()
     }
 
@@ -18,6 +20,12 @@ object QueueService {
         return CompletableFuture.supplyAsync {
             getAllQueues().get().firstOrNull { it.containsPlayer(player) }
         }
+    }
+
+    fun recalculateQueue(queue: Queue) {
+        queue.players.sortedBy { it.priority }.reversed()
+
+        queue.save()
     }
 
     fun getAllQueues() : CompletableFuture<Collection<Queue>> {
