@@ -23,7 +23,7 @@ object QueueService {
     }
 
     fun recalculateQueue(queue: Queue) {
-        queue.players.sortedBy { it.priority }.reversed()
+        queue.players.sortedBy { it.priority }
 
         queue.save()
     }
