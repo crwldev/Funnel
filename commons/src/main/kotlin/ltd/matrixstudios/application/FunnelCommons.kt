@@ -41,10 +41,11 @@ object FunnelCommons {
 
         if (!console) {
             runRedisCommand {
-                val exists = it.hexists("Funnel:queues:", queueId)
+                val exists = it.hexists("Funnel:queues:", queueId.toLowerCase())
 
                 if (exists) {
-                    val redisFetchedData = it.hget("Funnel:queues:", queueId)
+                    println("Found a queue!")
+                    val redisFetchedData = it.hget("Funnel:queues:", queueId.toLowerCase())
 
                     val queue = gson.fromJson(redisFetchedData, Queue::class.java)
 

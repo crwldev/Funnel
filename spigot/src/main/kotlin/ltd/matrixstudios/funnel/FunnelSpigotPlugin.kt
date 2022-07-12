@@ -41,7 +41,15 @@ class FunnelSpigotPlugin : JavaPlugin() {
     }
 
     fun getPriorityForPlayer(player: Player) : Int {
-        return PriorityService.priorities.entries.sortedBy { it.value }.reversed().firstOrNull { player.hasPermission(it.key) }?.value ?: 0
+        for (priority in PriorityService.priorities.entries)
+        {
+            if (player.hasPermission(priority.key))
+            {
+                return priority.value
+            }
+        }
+
+        return 100
     }
 
     fun createQueue() {

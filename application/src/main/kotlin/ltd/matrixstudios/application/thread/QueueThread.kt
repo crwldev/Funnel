@@ -23,14 +23,12 @@ class QueueThread : Thread() {
                         }
                     }
                 }
-                println("a")
                 FunnelCommons.runRedisCommand {
                     it.publish(
                         "Funnel:bukkit",
                         "CHECK_QUEUE|${queue.id}"
                     )
                 }
-                println("b")
             }
             try {
                 sleep(1500L)

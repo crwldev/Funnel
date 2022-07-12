@@ -5,4 +5,4 @@ jedisURI: "redis://172.18.0.1:6379/0"
 priorities:
     default:
       permission: "queue.default"
-      priority: 1
+      priority: 100

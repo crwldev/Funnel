@@ -17,7 +17,6 @@ class FunnelApplication {
         FunnelCommons.start("redis://127.0.0.1:6379/0", "none", "none", true)
 
         QueueThread().start()
-        //AbsentQueuePlayerCheck().start()
     }
 
 

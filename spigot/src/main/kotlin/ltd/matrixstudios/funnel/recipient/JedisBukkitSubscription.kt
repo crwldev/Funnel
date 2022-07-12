@@ -54,16 +54,19 @@ class JedisBukkitSubscription : JedisPubSub() {
 
 
                            for (player in it.players) {
-                               val bukkitPlayer = Bukkit.getPlayer(player.uuid)
+                               if (player != null)
+                               {
+                                   val bukkitPlayer = Bukkit.getPlayer(player.uuid)
 
-                               if (bukkitPlayer != null) {
-                                   player.lastUpdated = System.currentTimeMillis()
+                                   if (bukkitPlayer != null) {
+                                       player.lastUpdated = System.currentTimeMillis()
 
-                               }
+                                   }
 
-                               if (bukkitPlayer == null) {
-                                   if (System.currentTimeMillis().minus(player.lastUpdated) >= 15000L) {
-                                       it.remove(player.uuid)
+                                   if (bukkitPlayer == null) {
+                                       if (System.currentTimeMillis().minus(player.lastUpdated) >= 15000L) {
+                                           it.remove(player.uuid)
+                                       }
                                    }
                                }
 
