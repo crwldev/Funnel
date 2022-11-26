@@ -31,9 +31,9 @@ class JedisBukkitSubscription : JedisPubSub() {
                                 queue.remove(player.uniqueId)
 
                                 queue.save()
+                            } else {
+                                queue.remove(UUID.fromString(extraMeta))
                             }
-
-
                         } else {
                             return
                         }
@@ -60,11 +60,10 @@ class JedisBukkitSubscription : JedisPubSub() {
 
                                    if (bukkitPlayer != null) {
                                        player.lastUpdated = System.currentTimeMillis()
-
                                    }
 
                                    if (bukkitPlayer == null) {
-                                       if (System.currentTimeMillis().minus(player.lastUpdated) >= 15000L) {
+                                       if (System.currentTimeMillis().minus(player.lastUpdated) >= TimeUnit.MINUTES.toMillis(1L)) {
                                            it.remove(player.uuid)
                                        }
                                    }
