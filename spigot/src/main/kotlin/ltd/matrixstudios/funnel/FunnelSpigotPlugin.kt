@@ -54,7 +54,7 @@ class FunnelSpigotPlugin : JavaPlugin() {
 
     fun createQueue() {
         FunnelCommons.start(
-            config.getString("jedisURI").lowercase(),
+            config.getString("jedisURI"),
             config.getString("queueName"),
             config.getString("queueDestination"),
             false
