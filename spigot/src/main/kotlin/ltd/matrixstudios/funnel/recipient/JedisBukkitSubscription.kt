@@ -21,30 +21,26 @@ class JedisBukkitSubscription : JedisPubSub() {
             "SEND_PLAYER" -> {
                 object : BukkitRunnable() {
                     override fun run() {
-                        val player = Bukkit.getPlayer(UUID.fromString(extraMeta))
+                        val player = Bukkit.getPlayer(UUID.fromString(extraMeta)) ?: return
+
                         val queue = QueueService.findQueueByPlayer(player.uniqueId).get()
                         if (queue != null) {
-                            if (player != null) {
-                                player.sendMessage("${ChatColor.GREEN}You are being sent!")
-                                BungeeUtil.send(player, queue.destination)
+                            player.sendMessage("${ChatColor.GREEN}You are being sent!")
+                            BungeeUtil.send(player, queue.destination)
 
-                                queue.remove(player.uniqueId)
+                            queue.remove(player.uniqueId)
 
-                                queue.save()
-                            } else {
-                                queue.remove(UUID.fromString(extraMeta))
-                            }
-                        } else {
-                            return
+                            queue.save()
                         }
                     }
                 }.runTask(FunnelSpigotPlugin.instance)
             }
+
             "CHECK_QUEUE" -> {
                 object : BukkitRunnable() {
                     override fun run() {
 
-                       QueueService.findQueue(extraMeta).thenApply {
+                        QueueService.findQueue(extraMeta).thenApply {
                             if (it == null) {
                                 Bukkit.getLogger().severe("Tried to check queue but it was null")
 
@@ -53,26 +49,27 @@ class JedisBukkitSubscription : JedisPubSub() {
 
 
 
-                           for (player in it.players) {
-                               if (player != null)
-                               {
-                                   val bukkitPlayer = Bukkit.getPlayer(player.uuid)
+                            for (player in it.players) {
+                                if (player != null) {
+                                    val bukkitPlayer = Bukkit.getPlayer(player.uuid)
 
-                                   if (bukkitPlayer != null) {
-                                       player.lastUpdated = System.currentTimeMillis()
-                                   }
+                                    if (bukkitPlayer != null) {
+                                        player.lastUpdated = System.currentTimeMillis()
+                                    }
 
-                                   if (bukkitPlayer == null) {
-                                       if (System.currentTimeMillis().minus(player.lastUpdated) >= TimeUnit.MINUTES.toMillis(1L)) {
-                                           it.remove(player.uuid)
-                                       }
-                                   }
-                               }
+                                    if (bukkitPlayer == null) {
+                                        if (System.currentTimeMillis()
+                                                .minus(player.lastUpdated) >= TimeUnit.MINUTES.toMillis(1L)
+                                        ) {
+                                            it.remove(player.uuid)
+                                        }
+                                    }
+                                }
 
 
-                           }
+                            }
 
-                           it.save()
+                            it.save()
                         }
                     }
                 }.runTask(FunnelSpigotPlugin.instance)

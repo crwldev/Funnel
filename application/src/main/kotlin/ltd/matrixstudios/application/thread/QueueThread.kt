@@ -19,7 +19,6 @@ class QueueThread : Thread() {
                                 "Funnel:bukkit",
                                 "SEND_PLAYER|${nextToSend.uuid}"
                             )
-
                         }
                     }
                 }
@@ -29,6 +28,8 @@ class QueueThread : Thread() {
                         "CHECK_QUEUE|${queue.id}"
                     )
                 }
+
+                queue.save()
             }
             try {
                 sleep(1500L)
