@@ -21,16 +21,21 @@ class JedisBukkitSubscription : JedisPubSub() {
             "SEND_PLAYER" -> {
                 object : BukkitRunnable() {
                     override fun run() {
-                        val player = Bukkit.getPlayer(UUID.fromString(extraMeta)) ?: return
+                        val player = Bukkit.getPlayer(UUID.fromString(extraMeta))
 
                         val queue = QueueService.findQueueByPlayer(player.uniqueId).get()
+
+                        println(queue?.id)
+
                         if (queue != null) {
-                            player.sendMessage("${ChatColor.GREEN}You are being sent!")
-                            BungeeUtil.send(player, queue.destination)
+                            if (player != null) {
+                                player.sendMessage("${ChatColor.GREEN}You are being sent!")
+                                BungeeUtil.send(player, queue.destination)
 
-                            queue.remove(player.uniqueId)
+                                queue.remove(player.uniqueId)
 
-                            queue.save()
+                                queue.save()
+                            }
                         }
                     }
                 }.runTask(FunnelSpigotPlugin.instance)

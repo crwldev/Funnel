@@ -20,6 +20,8 @@ class QueueThread : Thread() {
                                 "SEND_PLAYER|${nextToSend.uuid}"
                             )
                         }
+                    } else {
+                        queue.save()
                     }
                 }
                 FunnelCommons.runRedisCommand {
@@ -28,8 +30,6 @@ class QueueThread : Thread() {
                         "CHECK_QUEUE|${queue.id}"
                     )
                 }
-
-                queue.save()
             }
             try {
                 sleep(1500L)
