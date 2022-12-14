@@ -23,12 +23,13 @@ class JedisBukkitSubscription : JedisPubSub() {
                     override fun run() {
                         val player = Bukkit.getPlayer(UUID.fromString(extraMeta))
 
+                        if (player == null) return
+
                         val queue = QueueService.findQueueByPlayer(player.uniqueId).get()
 
                         println(queue?.id)
 
                         if (queue != null) {
-                            if (player != null) {
                                 player.sendMessage("${ChatColor.GREEN}You are being sent!")
                                 BungeeUtil.send(player, queue.destination)
 
@@ -36,7 +37,6 @@ class JedisBukkitSubscription : JedisPubSub() {
 
                                 queue.save()
                             }
-                        }
                     }
                 }.runTask(FunnelSpigotPlugin.instance)
             }
